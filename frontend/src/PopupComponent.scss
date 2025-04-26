@@ -1,0 +1,17 @@
+// Variables
+$primary-color: #1da1f2;
+$background-color: #f5f8fa;
+$text-color: #14171a;
+$secondary-text: #657786;
+$border-color: #e1e8ed;
+$error-color: #e0245e;
+
+#popup-window{
+    width: 400px;
+    height: 300px;
+    height: 600px;
+    overflow-y: scroll;
+    background-color: $background-color;
+    color: $text-color;
+    overflow-y: auto;
+}
