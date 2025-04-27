@@ -6,9 +6,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { IFilterSettings } from "../interfaces/IFilterSettings";
 import {
-  filterSettings as defaultPreferences,
-  loadFilterSettings,
-} from "../functions/filterSettings";
+  defaultPreferences,
+  UserPreferencesService,
+} from "../services/UserPreferencesService";
 import { setChromeStorage } from "../functions/chromeStorage";
 
 const UserSelections = () => {
@@ -23,12 +23,12 @@ const UserSelections = () => {
     };
     setChromeStorage(updatedPreferences);
 
-    setPreferences(updatedPreferences);
+    UserPreferencesService.setUserPreferences(updatedPreferences);
   };
 
   useEffect(() => {
-    loadFilterSettings().then((result) => {
-      setPreferences(result);
+    UserPreferencesService.subscribe((updatedPreferences) => {
+      setPreferences(updatedPreferences);
     });
   }, []);
 

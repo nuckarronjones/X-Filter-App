@@ -1,7 +1,9 @@
-import { loadFilterSettings } from "./filterSettings";
+import { IPostInfo } from "../interfaces/IPostInfo";
 
-const init = () => {
-  loadFilterSettings();
-};
+const processedPostIds = new Set<string>();
 
-init();
+const allPosts: IPostInfo[] = [];
+
+(() => {
+    
+})();

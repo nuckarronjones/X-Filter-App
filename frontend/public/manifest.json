@@ -14,21 +14,10 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://x.com/*",
-        "https://twitter.com/*"
-      ],
-      "js": [
-        "js/vendor.js",
-        "js/content.js"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"]
     }
   ],
-  "permissions": [
-    "storage"
-  ],
-  "host_permissions": [
-    "https://x.com/*",
-    "https://twitter.com/*"
-  ]
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"]
 }
