@@ -1,5 +1,6 @@
 import { adKeywords } from "../data/adKeywords";
 import { IPostInfo } from "../interfaces/IPostInfo";
+import { _checkAdwordFilter, _checkPoliticalFilter } from "../utils/filters";
 import { logPostInfo } from "../utils/logPostInfo";
 
 const allPosts = new Map<string, IPostInfo>();
@@ -7,31 +8,18 @@ const allPosts = new Map<string, IPostInfo>();
 const filteredPostIds = new Set<string>();
 
 const _filterElement = (article: HTMLElement): void => {
-  const firstDiv = article.querySelector('div');
-  
+  const firstDiv = article.querySelector("div");
+
   if (firstDiv) {
     firstDiv.style.filter = "blur(30px)";
   }
 };
 
-const _checkAdwordFilter = (post: IPostInfo): void => {
-  const adWords = adKeywords;
-  const postId = post.id;
-  let hidePost: boolean = false;
-
-  adWords.forEach((adWord) => {
-    if (post.content.toUpperCase().includes(adWord.toUpperCase())) {
-      logPostInfo(post, "filtering post");
-      hidePost = true;
-    }
-  });
-
-  if (hidePost) filteredPostIds.add(postId);
-};
-
 const _applyFiltering = (): void => {
   allPosts.forEach((post) => {
-    _checkAdwordFilter(post);
+    if (_checkPoliticalFilter(post) || _checkAdwordFilter(post)) {
+      filteredPostIds.add(post.id);
+    }
   });
 
   filteredPostIds.forEach((id) => {
@@ -79,11 +67,8 @@ const _gatherPosts = () => {
       const post = _extractPostInfo(article);
 
       if (post) {
-        //this means we rendered the same post we have processed before, need to check if it needs to be filtered
-        if (allPosts.has(post.id)) {
-          if (filteredPostIds.has(post.id)) {
-            _filterElement(post.element);
-          }
+        if (allPosts.has(post.id) && filteredPostIds.has(post.id)) {
+          _filterElement(post.element);
         } else {
           allPosts.set(post.id, post);
         }
