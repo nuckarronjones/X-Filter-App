@@ -1,17 +1,18 @@
 import { adKeywords } from "../data/adKeywords";
+import { IFilterSettings } from "../interfaces/IFilterSettings";
 import { IPostInfo } from "../interfaces/IPostInfo";
 import { logPostInfo } from "./logPostInfo";
 
 const _checkAdwordFilter = (post: IPostInfo): boolean => {
   const adWords = adKeywords;
 
-  adWords.forEach((adWord) => {
-    if (post.content.toUpperCase().includes(adWord.toUpperCase())) {
-      return true;
-    }
+  return adWords.some((adWord) => {
+    const regex = new RegExp(
+      `\\b${adWord.trim().replace(/\s+/g, "\\s+")}\\b`,
+      "i"
+    );
+    return regex.test(post.content);
   });
-
-  return false;
 };
 
 const _checkPoliticalFilter = async (post: IPostInfo): Promise<any> => {
@@ -22,7 +23,7 @@ const _checkPoliticalFilter = async (post: IPostInfo): Promise<any> => {
       postData: {
         author: post.author,
         content: post.content,
-        checked: post.checked
+        checked: post.checked,
       },
     });
     return isPoliticalPost;
@@ -32,12 +33,17 @@ const _checkPoliticalFilter = async (post: IPostInfo): Promise<any> => {
   }
 };
 
-export const needToFilterPost = async (post: IPostInfo) => {
-  if (_checkAdwordFilter(post)) return true;
+export const needToFilterPost = async (
+  post: IPostInfo,
+  userPreferences: IFilterSettings
+) => {
+  const { political, ads } = userPreferences;
 
-  const politicalCheck = await _checkPoliticalFilter(post);
+  console.log(political, ads);
 
-  if (politicalCheck) return true;
+  if (ads && _checkAdwordFilter(post)) return true;
+
+  if (political && (await _checkPoliticalFilter(post))) return true;
 
   return false;
 };

@@ -41,7 +41,6 @@ export const adKeywords: string[] = [
   "new launch",
   "launching",
   "drops",
-  "dropping soon",
   "available now",
   "must-have",
   "bundle",

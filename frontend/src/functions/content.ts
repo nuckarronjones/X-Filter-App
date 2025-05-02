@@ -1,6 +1,9 @@
+import { IFilterSettings } from "../interfaces/IFilterSettings";
 import { IPostInfo } from "../interfaces/IPostInfo";
+import { defaultPreferences, UserPreferencesService } from "../services/UserPreferencesService";
 import { needToFilterPost } from "../utils/filters";
 import { logPostInfo } from "../utils/logPostInfo";
+import { getChromeStorage } from "./chromeStorage";
 
 const allPosts = new Map<string, IPostInfo>();
 
@@ -14,17 +17,17 @@ const _filterElement = (article: HTMLElement): void => {
   }
 };
 
-const _applyFiltering = async (): Promise<void> => {
+const _applyFiltering = async (userPreferences: IFilterSettings): Promise<void> => {
   for (const post of allPosts.values()) {
 
     const postNotFiltered = !filteredPostIds.has(post.id);
     const postNotReviewed = !post.checked;
 
     if (postNotReviewed && postNotFiltered) {
-      const postNeedsToBeFiltered = await needToFilterPost(post);
+      const postNeedsToBeFiltered = await needToFilterPost(post, userPreferences);
 
       if (postNeedsToBeFiltered) {
-        
+
         //Logging enabled by default for now
         logPostInfo(post , "post to be filtered");
 
@@ -98,6 +101,10 @@ const _observePageMutations = () => {
   let isFiltering: boolean = false; // Prevent overlapping on filtering every time page mutates
 
   const observer = new MutationObserver(async (mutations) => {
+    const userPreferences = await _getUserPreferences();
+
+    if(!userPreferences.enabled) return;
+
     if (isFiltering) return;
 
     const relevantMutation = mutations.some(
@@ -109,7 +116,7 @@ const _observePageMutations = () => {
       isFiltering = true;
 
       _gatherPosts();
-      await _applyFiltering();
+      await _applyFiltering(userPreferences);
 
       isFiltering = false;
     } else {
@@ -139,6 +146,14 @@ function _getPostId(article: HTMLElement) {
   }
 
   return articleId;
+}
+
+async function _getUserPreferences(): Promise<IFilterSettings>{
+  const userPreferences: IFilterSettings = await getChromeStorage(
+    "filterSettings"
+  );
+
+  return userPreferences ?? {};
 }
 
 (() => {
