@@ -1,0 +1,53 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Dependency directories
+bower_components/
+
+# Build output
+/dist
+/build
+/coverage
+/.next
+
+# IDE files
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Angular
+.angular/
+
+# React
+.eslintcache
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+
+# Test coverage
+/coverage/
+
+# JetBrains IDEs
+.idea/
