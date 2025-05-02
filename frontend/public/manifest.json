@@ -23,7 +23,18 @@
       ]
     }
   ],
-  "permissions": ["runtime"],
+  "permissions": [
+    "activeTab",
+    "background",
+    "storage",
+    "tabs",
+    "scripting",
+    "notifications",
+    "alarms",
+    "contextMenus",
+    "declarativeNetRequest",
+    "identity"
+  ],
   "host_permissions": [
     "https://x.com/*",
     "https://twitter.com/*"
