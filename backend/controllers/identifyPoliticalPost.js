@@ -15,6 +15,7 @@ export async function identifyPoliticalPost(req, res) {
 
     const isPolitical = _toBoolean(response);
     
+    //Logging enabled by default for now
     console.log("isPolitical? ", isPolitical);
 
     res.status(200).json({ message: "OK", isPolitical: isPolitical });
