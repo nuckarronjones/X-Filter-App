@@ -22,8 +22,6 @@ export async function callOpenAI(author, content) {
 
   const result = response.choices[0].message.content.trim();
 
-  console.log("Response from OpenAI: ", result);
-
   return result;
 }
 
