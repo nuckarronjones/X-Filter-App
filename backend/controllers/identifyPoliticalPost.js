@@ -3,10 +3,10 @@ import { callOpenAI } from '../services/openAiService.js';
 export async function identifyPoliticalPost(req, res) {
   const { author, content } = req.body;
 
+  //Logging enabled by default for now
   console.log("Checking if post is political ", req.body);
 
   if (!author && !content) {
-    console.log("missing author and content");
     return res.status(400).json({ message: "Missing author and content", isPolitical: false });
   }
 
