@@ -39,8 +39,6 @@ export const needToFilterPost = async (
 ) => {
   const { political, ads } = userPreferences;
 
-  console.log(political, ads);
-
   if (ads && _checkAdwordFilter(post)) return true;
 
   if (political && (await _checkPoliticalFilter(post))) return true;
