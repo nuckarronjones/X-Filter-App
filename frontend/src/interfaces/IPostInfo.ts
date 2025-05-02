@@ -6,4 +6,5 @@ export interface IPostInfo {
   likes: string;
   retweets: string;
   element: HTMLElement;
+  checked: boolean | undefined;
 }

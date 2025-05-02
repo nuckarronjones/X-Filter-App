@@ -4,7 +4,6 @@ import { logPostInfo } from "./logPostInfo";
 
 const _checkAdwordFilter = (post: IPostInfo): boolean => {
   const adWords = adKeywords;
-  const postId = post.id;
 
   adWords.forEach((adWord) => {
     if (post.content.toUpperCase().includes(adWord.toUpperCase())) {
@@ -20,6 +19,11 @@ const _checkPoliticalFilter = async (post: IPostInfo): Promise<any> => {
     const isPoliticalPost = await chrome.runtime.sendMessage({
       type: "fetchData",
       url: "http://localhost:3000/identifyPoliticalPost",
+      postData: {
+        author: post.author,
+        content: post.content,
+        checked: post.checked
+      },
     });
     return isPoliticalPost;
   } catch (error) {
@@ -29,12 +33,11 @@ const _checkPoliticalFilter = async (post: IPostInfo): Promise<any> => {
 };
 
 export const needToFilterPost = async (post: IPostInfo) => {
-    if (_checkAdwordFilter(post)) return true;
-  
-    const politicalCheck = await _checkPoliticalFilter(post);
-    
-    if (politicalCheck) return true;
-  
-    return false;
-  };
-  
+  if (_checkAdwordFilter(post)) return true;
+
+  const politicalCheck = await _checkPoliticalFilter(post);
+
+  if (politicalCheck) return true;
+
+  return false;
+};

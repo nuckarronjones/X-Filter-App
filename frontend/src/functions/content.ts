@@ -1,5 +1,6 @@
 import { IPostInfo } from "../interfaces/IPostInfo";
-import {  needToFilterPost } from "../utils/filters";
+import { needToFilterPost } from "../utils/filters";
+import { logPostInfo } from "../utils/logPostInfo";
 
 const allPosts = new Map<string, IPostInfo>();
 
@@ -13,21 +14,40 @@ const _filterElement = (article: HTMLElement): void => {
   }
 };
 
-const _applyFiltering = (): void => {
-  allPosts.forEach(async (post) => {
-    if (await needToFilterPost(post)) {
-      filteredPostIds.add(post.id);
-    }
-  });
+const _applyFiltering = async (): Promise<void> => {
+  for (const post of allPosts.values()) {
 
-  filteredPostIds.forEach((id) => {
-    const posttoHide = allPosts.get(id);
-    _filterElement(posttoHide!.element);
-  });
+    const postNotFiltered = !filteredPostIds.has(post.id);
+    const postNotReviewed = !post.checked;
+
+    if (postNotReviewed && postNotFiltered) {
+      const postNeedsToBeFiltered = await needToFilterPost(post);
+
+      if (postNeedsToBeFiltered) {
+        
+        //Logging enabled by default for now
+        logPostInfo(post , "post to be filtered");
+
+        filteredPostIds.add(post.id);
+      }
+    }
+
+    post.checked = true;
+  }
+
+  for (const id of filteredPostIds) {
+    const postToHide = allPosts.get(id);
+
+    if (postToHide) {
+      _filterElement(postToHide.element);
+    }
+  }
 };
 
 const _extractPostInfo = (article: HTMLElement): IPostInfo | null => {
   const postId = _getPostId(article);
+
+  if (allPosts.get(postId)) return null;
 
   const authorName =
     article.querySelector('[data-testid="User-Name"]')?.querySelector("span")
@@ -54,6 +74,7 @@ const _extractPostInfo = (article: HTMLElement): IPostInfo | null => {
     likes,
     retweets,
     element: article,
+    checked: undefined,
   };
 };
 
@@ -64,28 +85,35 @@ const _gatherPosts = () => {
     if (article instanceof HTMLElement) {
       const post = _extractPostInfo(article);
 
-      if (post) {
-        if (allPosts.has(post.id) && filteredPostIds.has(post.id)) {
-          _filterElement(post.element);
-        } else {
-          allPosts.set(post.id, post);
-        }
+      if (!post) return;
+
+      if (!allPosts.has(post.id)) {
+        allPosts.set(post.id, post);
       }
     }
   });
 };
 
 const _observePageMutations = () => {
-  const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof HTMLElement) {
-            _gatherPosts();
-            _applyFiltering();
-          }
-        });
-      }
+  let isFiltering: boolean = false; // Prevent overlapping on filtering every time page mutates
+
+  const observer = new MutationObserver(async (mutations) => {
+    if (isFiltering) return;
+
+    const relevantMutation = mutations.some(
+      (mutation) =>
+        mutation.type === "childList" && mutation.addedNodes.length > 0
+    );
+
+    if (relevantMutation) {
+      isFiltering = true;
+
+      _gatherPosts();
+      await _applyFiltering();
+
+      isFiltering = false;
+    } else {
+      return;
     }
   });
 
@@ -103,6 +131,7 @@ function _getPostId(article: HTMLElement) {
   for (const link of links) {
     const href = link.getAttribute("href") || "";
     const match = href.match(/\d{6,}/);
+
     if (match) {
       articleId = match[0];
       break;
