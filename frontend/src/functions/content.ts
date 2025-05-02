@@ -1,7 +1,5 @@
-import { adKeywords } from "../data/adKeywords";
 import { IPostInfo } from "../interfaces/IPostInfo";
-import { _checkAdwordFilter, _checkPoliticalFilter } from "../utils/filters";
-import { logPostInfo } from "../utils/logPostInfo";
+import {  needToFilterPost } from "../utils/filters";
 
 const allPosts = new Map<string, IPostInfo>();
 
@@ -16,8 +14,8 @@ const _filterElement = (article: HTMLElement): void => {
 };
 
 const _applyFiltering = (): void => {
-  allPosts.forEach((post) => {
-    if (_checkPoliticalFilter(post) || _checkAdwordFilter(post)) {
+  allPosts.forEach(async (post) => {
+    if (await needToFilterPost(post)) {
       filteredPostIds.add(post.id);
     }
   });

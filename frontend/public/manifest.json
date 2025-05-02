@@ -23,11 +23,12 @@
       ]
     }
   ],
-  "permissions": [
-    "storage"
-  ],
+  "permissions": ["runtime"],
   "host_permissions": [
     "https://x.com/*",
     "https://twitter.com/*"
-  ]
+  ],
+  "background": {
+    "service_worker": "js/background.js" 
+  }
 }
