@@ -6,12 +6,16 @@ $secondary-text: #657786;
 $border-color: #e1e8ed;
 $error-color: #e0245e;
 
-#popup-window{
-    width: 400px;
-    height: 300px;
-    height: 600px;
-    overflow-y: scroll;
-    background-color: $background-color;
-    color: $text-color;
-    overflow-y: auto;
+#popup-window {
+  width: 400px;
+  height: 300px;
+  height: 600px;
+  overflow-y: hidden;
+  background-color: $background-color;
+  color: $text-color;
+}
+
+.form-switch .form-check-input:checked {
+  background-color: rgb(29, 155, 240) !important;
+  border-color: rgb(29, 155, 240) !important;
 }

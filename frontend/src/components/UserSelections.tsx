@@ -66,7 +66,9 @@ const UserSelections = () => {
                 onChange={() => handleToggle("political")}
                 disabled={!userPreferences.enabled}
               />
+
               <div className="border-top my-3 w-100"></div>
+
               <Form.Check
                 type="switch"
                 id="body-switch-2"
@@ -76,6 +78,9 @@ const UserSelections = () => {
                 disabled={!userPreferences.enabled}
               />
             </Form>
+
+            <div className="border-top my-3 w-100"></div>
+            
           </Col>
         </Row>
 
