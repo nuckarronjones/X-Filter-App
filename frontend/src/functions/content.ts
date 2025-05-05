@@ -19,23 +19,19 @@ const _filterElement = (article: HTMLElement): void => {
 
 const _applyFiltering = async (userPreferences: IFilterSettings): Promise<void> => {
   for (const post of allPosts.values()) {
-
+    
     const postNotFiltered = !filteredPostIds.has(post.id);
-    const postNotReviewed = !post.checked;
 
-    if (postNotReviewed && postNotFiltered) {
+    if (postNotFiltered) {
       const postNeedsToBeFiltered = await needToFilterPost(post, userPreferences);
 
       if (postNeedsToBeFiltered) {
-
         //Logging enabled by default for now
         logPostInfo(post , "post to be filtered");
 
         filteredPostIds.add(post.id);
       }
     }
-
-    post.checked = true;
   }
 
   for (const id of filteredPostIds) {

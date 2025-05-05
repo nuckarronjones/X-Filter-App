@@ -1,7 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import "./PopupComponent.scss";
-import UserSelections from "./components/UserSelections";
+import UserSelections from "./components/UserSelectionsComponent/UserSelections";
+import Footer from "./components/FooterComponent/FooterComponent";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -10,6 +11,7 @@ const Popup = () => {
     <>
       <div id="popup-window">
         <UserSelections />
+        <Footer />
       </div>
     </>
   );
