@@ -1,6 +1,5 @@
 import { IFilterSettings } from "../interfaces/IFilterSettings";
 import { IPostInfo } from "../interfaces/IPostInfo";
-import { defaultPreferences, UserPreferencesService } from "../services/UserPreferencesService";
 import { needToFilterPost } from "../utils/filters";
 import { logPostInfo } from "../utils/logPostInfo";
 import { getChromeStorage } from "./chromeStorage";
@@ -19,7 +18,6 @@ const _filterElement = (article: HTMLElement): void => {
 
 const _applyFiltering = async (userPreferences: IFilterSettings): Promise<void> => {
   for (const post of allPosts.values()) {
-    
     const postNotFiltered = !filteredPostIds.has(post.id);
 
     if (postNotFiltered) {
@@ -27,7 +25,7 @@ const _applyFiltering = async (userPreferences: IFilterSettings): Promise<void> 
 
       if (postNeedsToBeFiltered) {
         //Logging enabled by default for now
-        logPostInfo(post , "post to be filtered");
+        logPostInfo(post, "post to be filtered");
 
         filteredPostIds.add(post.id);
       }
@@ -45,8 +43,6 @@ const _applyFiltering = async (userPreferences: IFilterSettings): Promise<void> 
 
 const _extractPostInfo = (article: HTMLElement): IPostInfo | null => {
   const postId = _getPostId(article);
-
-  if (allPosts.get(postId)) return null;
 
   const authorName =
     article.querySelector('[data-testid="User-Name"]')?.querySelector("span")
@@ -86,9 +82,7 @@ const _gatherPosts = () => {
 
       if (!post) return;
 
-      if (!allPosts.has(post.id)) {
-        allPosts.set(post.id, post);
-      }
+      allPosts.set(post.id, post);
     }
   });
 };
@@ -99,7 +93,7 @@ const _observePageMutations = () => {
   const observer = new MutationObserver(async (mutations) => {
     const userPreferences = await _getUserPreferences();
 
-    if(!userPreferences.enabled) return;
+    if (!userPreferences.enabled) return;
 
     if (isFiltering) return;
 
@@ -144,7 +138,7 @@ function _getPostId(article: HTMLElement) {
   return articleId;
 }
 
-async function _getUserPreferences(): Promise<IFilterSettings>{
+async function _getUserPreferences(): Promise<IFilterSettings> {
   const userPreferences: IFilterSettings = await getChromeStorage(
     "filterSettings"
   );
