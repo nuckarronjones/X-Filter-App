@@ -1,3 +1,9 @@
+export enum PostClassification {
+  Political = "Political",
+  Advertisement = "Advertisement",
+  Misc = "Misc"
+} 
+
 export interface IPostInfo {
   id: string;
   author: string;
@@ -6,5 +12,5 @@ export interface IPostInfo {
   likes: string;
   retweets: string;
   element: HTMLElement;
-  checked: boolean | undefined;
+  classification: PostClassification | undefined;
 }

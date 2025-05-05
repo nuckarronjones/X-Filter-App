@@ -1,5 +1,6 @@
 import { IFilterSettings } from "../interfaces/IFilterSettings";
 import { IPostInfo } from "../interfaces/IPostInfo";
+import { createLabel } from "../utils/domUtils";
 import { needToFilterPost } from "../utils/filters";
 import { logPostInfo } from "../utils/logPostInfo";
 import { getChromeStorage } from "./chromeStorage";
@@ -8,20 +9,32 @@ const allPosts = new Map<string, IPostInfo>();
 
 const filteredPostIds = new Set<string>();
 
-const _filterElement = (article: HTMLElement): void => {
-  const firstDiv = article.querySelector("div");
+const _filterElement = (post: IPostInfo): void => {
+  const container = post.element;
+  const existingLabel = container.querySelector(".x-filter-label");
+  const firstDiv = container.querySelector("div");
 
   if (firstDiv) {
     firstDiv.style.filter = "blur(30px)";
+
+    if (!existingLabel) {
+      container.style.position = "relative";
+      container.appendChild(createLabel());
+    }
   }
 };
 
-const _applyFiltering = async (userPreferences: IFilterSettings): Promise<void> => {
+const _applyFiltering = async (
+  userPreferences: IFilterSettings
+): Promise<void> => {
   for (const post of allPosts.values()) {
     const postNotFiltered = !filteredPostIds.has(post.id);
 
     if (postNotFiltered) {
-      const postNeedsToBeFiltered = await needToFilterPost(post, userPreferences);
+      const postNeedsToBeFiltered = await needToFilterPost(
+        post,
+        userPreferences
+      );
 
       if (postNeedsToBeFiltered) {
         //Logging enabled by default for now
@@ -36,7 +49,7 @@ const _applyFiltering = async (userPreferences: IFilterSettings): Promise<void> 
     const postToHide = allPosts.get(id);
 
     if (postToHide) {
-      _filterElement(postToHide.element);
+      _filterElement(postToHide);
     }
   }
 };
@@ -69,7 +82,7 @@ const _extractPostInfo = (article: HTMLElement): IPostInfo | null => {
     likes,
     retweets,
     element: article,
-    checked: undefined,
+    classification: undefined,
   };
 };
 

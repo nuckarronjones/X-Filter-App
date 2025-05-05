@@ -22,8 +22,7 @@ const _checkPoliticalFilter = async (post: IPostInfo): Promise<any> => {
       url: "http://localhost:3000/identifyPoliticalPost",
       postData: {
         author: post.author,
-        content: post.content,
-        checked: post.checked,
+        content: post.content
       },
     });
     return isPoliticalPost;
