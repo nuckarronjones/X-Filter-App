@@ -83,6 +83,7 @@ const _extractPostInfo = (article: HTMLElement): IPostInfo | null => {
     retweets,
     element: article,
     classification: undefined,
+    filtered: false
   };
 };
 

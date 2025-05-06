@@ -13,4 +13,5 @@ export interface IPostInfo {
   retweets: string;
   element: HTMLElement;
   classification: PostClassification | undefined;
+  filtered: boolean;
 }
