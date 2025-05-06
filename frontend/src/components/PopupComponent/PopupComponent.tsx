@@ -1,8 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import "./PopupComponent.scss";
-import UserSelections from "./components/UserSelectionsComponent/UserSelections";
-import Footer from "./components/FooterComponent/FooterComponent";
+import UserSelections from "../UserSelectionsComponent/UserSelections";
+import Footer from "../FooterComponent/FooterComponent";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
