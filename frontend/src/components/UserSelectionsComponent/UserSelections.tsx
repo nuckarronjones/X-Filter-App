@@ -6,12 +6,18 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { IFilterSettings } from "../../interfaces/IFilterSettings";
 import {
-  defaultPreferences,
-  UserPreferencesService,
-} from "../../services/UserPreferencesService";
-import { setChromeStorage } from "../../functions/chromeStorage";
+  getChromeStorage,
+  setChromeStorage,
+} from "../../functions/chromeStorage";
 
 import "./UserSelections.scss";
+
+export const defaultPreferences: IFilterSettings = {
+  enabled: true,
+  likes: [0, 100],
+  ads: true,
+  political: true,
+};
 
 const UserSelections = () => {
   const [userPreferences, setPreferences] = useState<IFilterSettings>(
@@ -25,13 +31,14 @@ const UserSelections = () => {
     };
     setChromeStorage(updatedPreferences);
 
-    UserPreferencesService.setUserPreferences(updatedPreferences);
+    setPreferences(updatedPreferences);
   };
 
   useEffect(() => {
-    UserPreferencesService.subscribe((updatedPreferences) => {
-      setPreferences(updatedPreferences);
-    });
+    getChromeStorage("filterSettings").then((localSettings)=>{
+      const userPreferences = localSettings ?? defaultPreferences;
+      setPreferences(userPreferences);
+    })
   }, []);
 
   return (
