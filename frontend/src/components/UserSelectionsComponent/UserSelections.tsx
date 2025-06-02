@@ -11,6 +11,7 @@ import {
 } from "../../functions/chromeStorage";
 
 import "./UserSelections.scss";
+import { Spinner } from "react-bootstrap";
 
 export const defaultPreferences: IFilterSettings = {
   enabled: true,
@@ -19,28 +20,37 @@ export const defaultPreferences: IFilterSettings = {
   political: true,
 };
 
+
 const UserSelections = () => {
-  const [userPreferences, setPreferences] = useState<IFilterSettings>(
-    defaultPreferences!
-  );
+  const [userPreferences, setPreferences] = useState<IFilterSettings | null>();
 
   const handleToggle = (key: keyof IFilterSettings) => {
-    const updatedPreferences = {
-      ...userPreferences,
-      [key]: !userPreferences[key],
-    };
-    setChromeStorage(updatedPreferences);
+    if (userPreferences) {
+      const updatedPreferences = {
+        ...userPreferences,
+        [key]: userPreferences[key],
+      };
+      setChromeStorage(updatedPreferences);
 
-    setPreferences(updatedPreferences);
+      setPreferences(updatedPreferences);
+    }
   };
 
   useEffect(() => {
-    getChromeStorage("filterSettings").then((localSettings)=>{
+    getChromeStorage("filterSettings").then((localSettings) => {
       const userPreferences = localSettings ?? defaultPreferences;
       setPreferences(userPreferences);
-    })
+    });
   }, []);
 
+  if (!userPreferences) {
+    return (
+      <div className="w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner />
+      </div>
+    );
+  }
+  
   return (
     <div id="user-selections">
       <Navbar bg="dark" expand="lg">
@@ -101,7 +111,7 @@ const UserSelections = () => {
         </Row>
 
         {/* Debugging: show current preferences */}
-        {/* <pre className="mt-3">{JSON.stringify(userPreferences, null, 2)}</pre> */}
+        <pre className="mt-3">{JSON.stringify(userPreferences, null, 2)}</pre>
       </Container>
     </div>
   );
