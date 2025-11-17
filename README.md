@@ -1,38 +1,54 @@
 # 🚫 X-Filter Chrome Extension
 
-#### A hackathon project undertaken to create an AI powered chrome extension.
+An AI-powered Chrome extension built as a hackathon project. Utilizes AI to filter out political content, and keywords for advertisement posts. 
 
-# ☁︎ Background
-- My team of friends and collegues embarked on a mission to create a chrome extension which leverages the power of LLMs.
-- In one day we managed to put something together; however, the code needed a lot of refinement and tuning. Original repository [here](https://github.com/dealwith/x-filter).
-- I decided to start fresh, and take what I needed from the previous repository. Here is the polished, working version.
+---
 
-# ✔Installation
-### 1) Clone or download the repository
-```
+## ☁︎ Background
+- My team and I set out to create a Chrome extension leveraging large language models (LLMs).  
+- In one day, we built a prototype, but the code needed refinement. The original repository is [here](https://github.com/dealwith/x-filter).  
+- I started fresh and extracted the best parts to create this polished, working version.
+
+---
+
+## ✔ Installation & Setup
+
+Follow these steps to get the X-Filter extension running locally:
+
+### 1. Clone the repository
+```bash
 git clone https://github.com/nuckarronjones/X-Filter-App
+cd X-Filter-App
 ```
-### 2) Install the dependencies in both frontend/backend
+### 2. Install dependencies
+#### Frontend
 ```
-cd frontend/
+cd frontend
 npm install
+```
+#### Backend
+```
+cd ../backend
+npm install
+```
+### 3. Configure environment variables
+- In the backend/ directory, create a .env file: OPENAI_API_KEY=your_openai_api_key_here
 
-cd backend/
-npm install
+### 4. Build the frontend
 ```
-### 3) Create .env file in backend/
-- Create a .env folder in the backend directory, and populate OPENAI_API_KEY={your key}. You can obtain an API key from the following link https://platform.openai.com/api-keys.
-### 4) Build the frontend
-```
-cd frontend/
+cd ../frontend
 npm run build
 ```
-- Output will be in dist/ folder
-### 5) Run the backend
+- This will generate a dist/ folder containing the production-ready frontend.
+### 5. Start the backend server
 ```
-cd backend/
+cd ../backend
 npm run start
 ```
-### 6) Upload dist folder to chrome browser
-- Extensions -> manage extensions -> load unpacked -> [upload dist folder]
+- The backend will now be running locally.
 
+### 6. Load the extension in Chrome
+- Open Chrome and navigate to chrome://extensions/.
+- Enable Developer mode (toggle in the top-right corner).
+- Click Load unpacked and select the frontend/dist/ folder.
+- The extension should now appear in your Chrome toolbar.
