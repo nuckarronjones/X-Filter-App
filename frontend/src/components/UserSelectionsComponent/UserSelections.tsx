@@ -23,11 +23,11 @@ export const defaultPreferences: IFilterSettings = {
 const UserSelections = () => {
   const [userPreferences, setPreferences] = useState<IFilterSettings | null>();
 
-  const handleToggle = (key: keyof IFilterSettings) => {
+  const handleToggle = (key: keyof IFilterSettings, newValue: boolean) => {
     if (userPreferences) {
       const updatedPreferences = {
         ...userPreferences,
-        [key]: userPreferences[key],
+        [key]: newValue,
       };
       setChromeStorage(updatedPreferences);
 
@@ -37,7 +37,6 @@ const UserSelections = () => {
 
   useEffect(() => {
     getChromeStorage("filterSettings").then((localSettings) => {
-      
       const userPreferences =
         Object.entries(localSettings).length === 0
           ? defaultPreferences
@@ -73,7 +72,9 @@ const UserSelections = () => {
               id="body-switch-0"
               label="Off / On"
               checked={userPreferences.enabled}
-              onChange={() => handleToggle("enabled")}
+              onChange={() => {
+                handleToggle("enabled", !userPreferences.enabled);
+              }}
             />
           </Form>
         </Container>
@@ -88,7 +89,9 @@ const UserSelections = () => {
                 id="body-switch-2"
                 label="Advertisements"
                 checked={userPreferences.ads}
-                onChange={() => handleToggle("ads")}
+                onChange={() => {
+                  handleToggle("ads", !userPreferences.ads);
+                }}
                 disabled={!userPreferences.enabled}
               />
 
@@ -100,7 +103,9 @@ const UserSelections = () => {
                   id="body-switch-1"
                   label="Political"
                   checked={userPreferences.political}
-                  onChange={() => handleToggle("political")}
+                  onChange={() => {
+                    handleToggle("political", !userPreferences.political);
+                  }}
                   disabled={!userPreferences.enabled}
                 />
 
@@ -115,7 +120,7 @@ const UserSelections = () => {
         </Row>
 
         {/* Debugging: show current preferences */}
-        <pre className="mt-3">{JSON.stringify(userPreferences, null, 2)}</pre>
+        {/* <pre className="mt-3">{JSON.stringify(userPreferences, null, 2)}</pre> */}
       </Container>
     </div>
   );
