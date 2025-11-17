@@ -2,11 +2,8 @@
 
 An AI-powered Chrome extension developed as a hackathon project, designed to filter political content and advertisements via keywords.
 
-[![Preview Image](https://drive.google.com/uc?export=view&id=1Hd9vB-5G6kQyCEoIeTfQfIA7Nae6n5xA)](https://drive.google.com/file/d/1Hd9vB-5G6kQyCEoIeTfQfIA7Nae6n5xA/view?usp=sharing)
-
-
 ## ☁︎ Background
-- My collegues and I set out to create a Chrome extension leveraging large language models (LLMs).  
+- My collegues and I set out to create a Chrome extension leveraging large language models (LLMs).
 - In one day, we built a prototype, but the code needed refinement. The original repository is [here](https://github.com/dealwith/x-filter).  
 - I started fresh and extracted the best parts to create this polished, working version.
 
