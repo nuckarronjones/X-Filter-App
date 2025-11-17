@@ -20,7 +20,6 @@ export const defaultPreferences: IFilterSettings = {
   political: true,
 };
 
-
 const UserSelections = () => {
   const [userPreferences, setPreferences] = useState<IFilterSettings | null>();
 
@@ -38,7 +37,12 @@ const UserSelections = () => {
 
   useEffect(() => {
     getChromeStorage("filterSettings").then((localSettings) => {
-      const userPreferences = localSettings ?? defaultPreferences;
+      
+      const userPreferences =
+        Object.entries(localSettings).length === 0
+          ? defaultPreferences
+          : localSettings;
+
       setPreferences(userPreferences);
     });
   }, []);
@@ -50,7 +54,7 @@ const UserSelections = () => {
       </div>
     );
   }
-  
+
   return (
     <div id="user-selections">
       <Navbar bg="dark" expand="lg">
