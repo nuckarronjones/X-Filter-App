@@ -1,6 +1,6 @@
 # 🚫 X-Filter Chrome Extension
 
-An AI-powered Chrome extension developed as a hackathon project, designed to filter political content and advertisements via keywords.
+An AI-powered Chrome extension developed as a hackathon project, designed to filter political content and advertisements via keywords for x.com.
 
 ## ☁︎ Background
 - My collegues and I set out to create a Chrome extension leveraging large language models (LLMs).
@@ -48,3 +48,6 @@ npm run start
 - Enable Developer mode (toggle in the top-right corner).
 - Click Load unpacked and select the frontend/dist/ folder.
 - The extension should now appear in your Chrome toolbar.
+
+### 7. Enjoy!
+- Enjoy your enhanced x.com experience, free of poitical content and advertisements disguised as posts. 
